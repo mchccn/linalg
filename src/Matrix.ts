@@ -1,6 +1,7 @@
 import { CreateArray, CreateMatrix, GenericMatrix } from "./types";
 import { YouSuckAtMathError } from "./utils";
 import { Vector2 } from "./Vector2";
+import { Vector3 } from "./Vector3";
 
 export class Matrix<Width extends number, Height extends number> extends Array<CreateArray<Width>> {
     public constructor(public readonly width: Width, public readonly height: Height, contents?: CreateMatrix<Width, Height>) {
@@ -33,5 +34,9 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
 
     public static fromVector2(a: Vector2, b: Vector2) {
         return new Matrix(2, 2, [[...a.toArray()], [...b.toArray()]]);
+    }
+
+    public static fromVector3(a: Vector3, b: Vector3, c: Vector3) {
+        return new Matrix(3, 3, [[...a.toArray()], [...b.toArray()], [...c.toArray()]]);
     }
 }
