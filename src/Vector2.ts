@@ -1,7 +1,9 @@
 import { Matrix } from "./Matrix";
-import { clone } from "./utils";
+import { clone, YouSuckAtMathError } from "./utils";
 
 export class Vector2 {
+    public static readonly ORDER = 2;
+
     private coords: [x: number, y: number];
 
     public constructor(x?: number, y?: number) {
@@ -168,6 +170,58 @@ export class Vector2 {
 
     public set 1(v: number) {
         this.coords[1] = v;
+    }
+
+    public static get up() {
+        return new Vector2(0, 1);
+    }
+
+    public static get down() {
+        return new Vector2(0, -1);
+    }
+
+    public static get left() {
+        return new Vector2(-1, 0);
+    }
+
+    public static get right() {
+        return new Vector2(1, 0);
+    }
+
+    public static lerp(a: Vector2, b: Vector2, t: number) {
+        if (t < 0 || t > 1) throw new YouSuckAtMathError("t in lerp(a, b, t) is between 0 and 1 inclusive");
+
+        const lerp = (a: number, b: number, t: number) => (1 - t) * a + t * b;
+
+        return new Vector2(lerp(a.x, b.x, t), lerp(a.y, b.y, t));
+    }
+
+    public static add(a: Vector2, b: Vector2) {
+        return a.clone().add(b.clone());
+    }
+
+    public static subtract(a: Vector2, b: Vector2) {
+        return a.clone().subtract(b.clone());
+    }
+
+    public static multiply(a: Vector2, b: Vector2) {
+        return a.clone().multiply(b.clone());
+    }
+
+    public static divide(a: Vector2, b: Vector2) {
+        return a.clone().divide(b.clone());
+    }
+
+    public static negate(vector: Vector2) {
+        return vector.clone().negate();
+    }
+
+    public static angleTo(a: Vector2, b: Vector2) {
+        return a.clone().angleTo(b.clone());
+    }
+
+    public static normalize(vector: Vector2) {
+        return vector.clone().normalize();
     }
 
     public static isVector2(v: any): v is Vector2 {
