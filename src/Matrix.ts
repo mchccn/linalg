@@ -2,6 +2,7 @@ import { CreateArray, CreateMatrix, GenericMatrix } from "./types";
 import { rotate, YouSuckAtMathError } from "./utils";
 import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
+import { Vector4 } from "./Vector4";
 
 export class Matrix<Width extends number, Height extends number> extends Array<CreateArray<Width>> {
     public constructor(public readonly width: Width, public readonly height: Height, contents?: CreateMatrix<Width, Height>) {
@@ -219,11 +220,15 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
     }
 
     public static fromVector2(a: Vector2, b: Vector2) {
-        return new Matrix(2, 2, rotate([[...a.toArray()], [...b.toArray()]], 1) as CreateMatrix<2, 2>);
+        return new Matrix(2, 2, rotate([a.toArray(), b.toArray()], 1) as CreateMatrix<2, 2>);
     }
 
     public static fromVector3(a: Vector3, b: Vector3, c: Vector3) {
-        return new Matrix(3, 3, rotate([[...a.toArray()], [...b.toArray()], [...c.toArray()]], 1) as CreateMatrix<3, 3>);
+        return new Matrix(3, 3, rotate([a.toArray(), b.toArray(), c.toArray()], 1) as CreateMatrix<3, 3>);
+    }
+
+    public static fromVector4(a: Vector4, b: Vector4, c: Vector4, d: Vector4) {
+        return new Matrix(4, 4, rotate([a.toArray(), b.toArray(), c.toArray(), d.toArray()], 1) as CreateMatrix<4, 4>);
     }
 
     public static isMatrix(v: any): v is Matrix<number, number> {
