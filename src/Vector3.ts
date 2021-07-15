@@ -1,5 +1,6 @@
 import { Matrix } from "./Matrix";
-import { clone, YouSuckAtMathError } from "./utils";
+import { CreateMatrix } from "./types";
+import { clone, rotate, YouSuckAtMathError } from "./utils";
 
 export class Vector3 {
     public static readonly ORDER = 3;
@@ -101,7 +102,7 @@ export class Vector3 {
     }
 
     public determinant(a: Vector3, b: Vector3) {
-        return new Matrix(3, 3, [[...this.coords], [...a.coords], [...b.coords]]).determinant();
+        return new Matrix(3, 3, rotate([[...this.coords], [...a.coords], [...b.coords]], 1) as CreateMatrix<3, 3>).determinant();
     }
 
     public get min() {

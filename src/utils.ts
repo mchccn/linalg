@@ -16,5 +16,9 @@ export function rotate<T extends any[][]>(m: T, dir: number): T {
     if (dir > 0) m.forEach((row) => row.reverse());
     else m.reverse();
 
+    const indices = m.flatMap((_, i) => (_.every((v) => typeof v === "undefined") ? [i] : []));
+
+    indices.forEach((i) => m.splice(i, 1));
+
     return m;
 }
