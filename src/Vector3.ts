@@ -140,6 +140,18 @@ export class Vector3 {
         return { x, y, z };
     }
 
+    public transform(transformation: Matrix<3, 3>) {
+        const [i, j, k] = transformation.map((row) => new Vector3(...row));
+
+        const { x, y, z } = this;
+
+        this.coords = [0, 0, 0];
+
+        this.add(i.multiply(x)).add(j.multiply(y)).add(k.multiply(z));
+
+        return this;
+    }
+
     public get magnitude() {
         return Math.cbrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }

@@ -132,6 +132,18 @@ export class Vector2 {
         return { x, y };
     }
 
+    public transform(transformation: Matrix<2, 2>) {
+        const [i, j] = transformation.map((row) => new Vector2(...row));
+
+        const { x, y } = this;
+
+        this.coords = [0, 0];
+
+        this.add(i.multiply(x)).add(j.multiply(y));
+
+        return this;
+    }
+
     public get magnitude() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
