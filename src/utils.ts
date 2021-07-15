@@ -9,3 +9,12 @@ export class YouSuckAtMathError extends Error {
         super(message);
     }
 }
+
+export function rotate<T extends any[][]>(m: T, dir: number): T {
+    for (let y = 0; y < m.length; ++y) for (let x = 0; x < y; ++x) [m[x][y], m[y][x]] = [m[y][x], m[x][y]];
+
+    if (dir > 0) m.forEach((row) => row.reverse());
+    else m.reverse();
+
+    return m;
+}

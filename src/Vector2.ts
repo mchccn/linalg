@@ -133,13 +133,10 @@ export class Vector2 {
     }
 
     public transform(transformation: Matrix<2, 2>) {
-        const [i, j] = transformation.map((row) => new Vector2(...row));
+        const [i, j] = transformation.multiply(new Matrix(1, 2, [[this.x], [this.y]]))[0];
 
-        const { x, y } = this;
-
-        this.coords = [0, 0];
-
-        this.add(i.multiply(x)).add(j.multiply(y));
+        this.x = i;
+        this.y = j;
 
         return this;
     }

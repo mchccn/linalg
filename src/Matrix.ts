@@ -1,5 +1,5 @@
 import { CreateArray, CreateMatrix, GenericMatrix } from "./types";
-import { YouSuckAtMathError } from "./utils";
+import { rotate, YouSuckAtMathError } from "./utils";
 import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
 
@@ -44,16 +44,16 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
         return this;
     }
 
-    public multiply(matrix: Matrix<Width, Height>): this;
+    public multiply(matrix: Matrix<number, number>): this;
     public multiply(scalar: number): this;
-    public multiply(factor: number | Matrix<Width, Height>): this {
+    public multiply(factor: number | Matrix<number, number>): this {
         if (Matrix.isMatrix(factor)) {
             if (this.width !== (factor.height as number))
                 throw new YouSuckAtMathError("the first matrix's width must be the same as the second matrix's height");
 
             const matrix = Matrix.rotate(factor, 1);
 
-            const buffer = new Matrix(this.width, matrix.width);
+            const buffer = new Matrix(this.width, factor.height);
 
             this.forEach((a, y) => {
                 matrix.forEach((row, x) => {
@@ -183,6 +183,10 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
         if (dir > 0) this.forEach((row) => row.reverse());
         else this.reverse();
 
+        const indices = this.flatMap((_, i) => (_.every((v) => typeof v === "undefined") ? [i] : []));
+
+        indices.forEach((i) => this.splice(i, 1));
+
         return this;
     }
 
@@ -195,14 +199,7 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
     }
 
     public static rotate<Width extends number, Height extends number>(matrix: Matrix<Width, Height>, dir: number) {
-        const m = matrix.clone();
-
-        for (let y = 0; y < m.length; ++y) for (let x = 0; x < y; ++x) [m[x][y], m[y][x]] = [m[y][x], m[x][y]];
-
-        if (dir > 0) m.forEach((row) => row.reverse());
-        else m.reverse();
-
-        return m;
+        return matrix.clone().rotate(dir);
     }
 
     public static zeros<Width extends number, Height extends number>(w: Width, h: Height) {
@@ -222,11 +219,11 @@ export class Matrix<Width extends number, Height extends number> extends Array<C
     }
 
     public static fromVector2(a: Vector2, b: Vector2) {
-        return new Matrix(2, 2, [[...a.toArray()], [...b.toArray()]]);
+        return new Matrix(2, 2, rotate([[...a.toArray()], [...b.toArray()]], 1) as CreateMatrix<2, 2>);
     }
 
     public static fromVector3(a: Vector3, b: Vector3, c: Vector3) {
-        return new Matrix(3, 3, [[...a.toArray()], [...b.toArray()], [...c.toArray()]]);
+        return new Matrix(3, 3, rotate([[...a.toArray()], [...b.toArray()], [...c.toArray()]], 1) as CreateMatrix<3, 3>);
     }
 
     public static isMatrix(v: any): v is Matrix<number, number> {

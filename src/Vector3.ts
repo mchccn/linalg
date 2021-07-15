@@ -96,8 +96,8 @@ export class Vector3 {
         return this.x * vector.x + this.y * vector.y + this.z * vector.z;
     }
 
-    public cross(vector: Vector3) {
-        // return
+    public cross(a: Vector3, b: Vector3) {
+        return new Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
     }
 
     public determinant(a: Vector3, b: Vector3) {
@@ -141,13 +141,11 @@ export class Vector3 {
     }
 
     public transform(transformation: Matrix<3, 3>) {
-        const [i, j, k] = transformation.map((row) => new Vector3(...row));
+        const [i, j, k] = transformation.multiply(new Matrix(1, 3, [[this.x], [this.y], [this.z]]))[0];
 
-        const { x, y, z } = this;
-
-        this.coords = [0, 0, 0];
-
-        this.add(i.multiply(x)).add(j.multiply(y)).add(k.multiply(z));
+        this.x = i;
+        this.y = j;
+        this.z = k;
 
         return this;
     }
