@@ -1,6 +1,6 @@
 {
     "name": "@cursorsdottsx/linalg",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Linear algebra in TypeScript so I can cheat on my homework.",
     "main": "dist/index.js",
     "scripts": {},
